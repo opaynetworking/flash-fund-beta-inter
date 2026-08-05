@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Credit - Premium Banking Features</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2563eb 0%, #059669 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+            overflow: hidden;
+        }
+
+        .background-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            filter: blur(60px);
+        }
+
+        .shape-1 {
+            width: 400px;
+            height: 400px;
+            top: -100px;
+            left: -100px;
+        }
+
+        .shape-2 {
+            width: 600px;
+            height: 600px;
+            bottom: -150px;
+            right: -150px;
+            background: rgba(37, 99, 235, 0.2);
+        }
+
+        .shape-3 {
+            width: 300px;
+            height: 300px;
+            top: 50%;
+            left: 30%;
+            background: rgba(5, 150, 105, 0.2);
+        }
+
+        .subscription-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .subscription-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            animation: rotate 15s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            color: #2563eb;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        .features {
+            margin: 30px 0;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(240, 247, 255, 0.7);
+            border-radius: 12px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.2);
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: #2563eb;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            font-size: 15px;
+            color: #1e293b;
+            font-weight: 500;
+        }
+
+        .price-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .price {
+            font-size: 48px;
+            font-weight: 700;
+            color: #059669;
+            position: relative;
+            display: inline-block;
+        }
+
+        .price::before {
+            content: '$';
+            font-size: 24px;
+            position: absolute;
+            left: -20px;
+            top: 10px;
+        }
+
+        .price-period {
+            color: #64748b;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .payment-button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .payment-button-primary {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.5);
+        }
+
+        .payment-button-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -5px rgba(37, 99, 235, 0.6);
+        }
+
+        .payment-button-secondary {
+            background: white;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+            box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-button-secondary:hover {
+            background: #f0f7ff;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.3);
+        }
+
+        .payment-button:active {
+            transform: translateY(0);
+        }
+
+        .payment-icon {
+            font-size: 20px;
+        }
+
+        .guarantee {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #dc2626;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            transform: rotate(15deg);
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <div class="subscription-card">
+        <div class="badge">POPULAR</div>
+        
+        <div class="header">
+            <h1 class="title">Get Credit</h1>
+            <p class="subtitle">Upgrade your banking experience with premium features</p>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-text">Fast Transaction Processing</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">∞</div>
+                <div class="feature-text">Unlimited Transactions</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⇄</div>
+                <div class="feature-text">Instant Wired Transfers</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🌎</div>
+                <div class="feature-text">International Wire Support</div>
+            </div>
+        </div>
+
+        <div class="price-container">
+            <div class="price">55</div>
+            <div class="price-period">one-time payment</div>
+        </div>
+
+        <div class="button-container">
+            <button class="payment-button payment-button-primary" onclick="window.location.href='#'">
+                <span class="payment-icon">🏦</span> Buy with Bank Transfer
+            </button>
+            <button class="payment-button payment-button-secondary" onclick="window.location.href='/btcpay.html'">
+                <span class="payment-icon">₿</span> Buy with BTC
+            </button>
+        </div>
+
+        <p class="guarantee">30-day money back guarantee</p>
+    </div>
+
+    <script>
+        // Add 3D tilt effect to the card
+        const card = document.querySelector('.subscription-card');
+        
+        card.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        card.addEventListener('mouseenter', () => {
+            card.style.transition = 'none';
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transition = 'transform 0.5s';
+            card.style.transform = 'rotateY(0deg) rotateX(0deg)';
+        });
+    </script>
+</body>
+</html>

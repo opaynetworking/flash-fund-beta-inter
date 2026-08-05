@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Processing</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .transaction-container {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        h1 {
+            color: #2563eb;
+            font-size: 24px;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .processing-container {
+            margin: 30px 0;
+        }
+        
+        .processing-text {
+            color: #2563eb;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background-color: #2563eb;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .loading-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .dot {
+            width: 10px;
+            height: 10px;
+            background-color: #cbd5e1;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(0.8);
+                background-color: #cbd5e1;
+            }
+            50% {
+                transform: scale(1.2);
+                background-color: #2563eb;
+            }
+        }
+        
+        .failure-message {
+            display: none;
+            background-color: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: #dc2626;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .failure-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+        
+        .failure-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .failure-details {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .get-credit-btn {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 15px;
+        }
+        
+        .get-credit-btn:hover {
+            background-color: #1d4ed8;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="transaction-container">
+        <h1>Transaction Processing</h1>
+        
+        <div class="processing-container">
+            <p class="processing-text">Processing your payment...</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="loading-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+        
+        <div class="failure-message" id="failureMessage">
+            <div class="failure-icon">❌</div>
+            <div class="failure-title">Transaction Failed</div>
+            <div class="failure-details">Transaction failed due to insufficient credit in your account.</div>
+            <button class="get-credit-btn" id="getCreditBtn">Get Credit</button>
+        </div>
+    </div>
+
+    <script>
+        // Simulate progress bar
+        const progressFill = document.getElementById('progressFill');
+        const failureMessage = document.getElementById('failureMessage');
+        const getCreditBtn = document.getElementById('getCreditBtn');
+        
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += 10;
+            progressFill.style.width = `${progress}%`;
+            
+            if (progress >= 100) {
+                clearInterval(progressInterval);
+            }
+        }, 1000);
+        
+        // Show failure message after 10 seconds
+        setTimeout(() => {
+            failureMessage.style.display = 'block';
+        }, 10000);
+        
+        // Button click handler
+        getCreditBtn.addEventListener('click', () => {
+            // Replace with your actual link
+            window.location.href = '/getcredit.html';
+        });
+    </script>
+</body>
+</html>
